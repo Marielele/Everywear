@@ -1,42 +1,234 @@
-.App {
-  text-align: center;
+body {
+  font-family: 'Urbanist', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root{
+  --color1: #E88D67;
+  --color2: #a04668;
+  --color3: #bdd9bf;
+  --color4: #4b88a2;
+  --Textos: #323335;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Contenido{
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  padding: 20px;
+}
+.Login{
+  width: 60%;
+  border-radius: 8px;
+  text-align: center;
+  padding: 2.5em;
+}
+.Signin{
+  width: 60%;
+  border-radius: 20px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 2.5em;
+}
+.Perfil{
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.inputUploadFile{
+  display: none;
+}
+
+.btn-outline-thirdcolor{
+  border-color: var(--color4);
+  background-color: white;
+  color: var(--color4);
+}
+.btn-outline-thirdcolor:hover{
+  background-color: var(--color4);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.bg-maincolor {
+  background-color: var(--color2);
+}
+.bg-secondcolor {
+  background-color: var(--color1);
+}
+.bg-thirdcolor {
+  background-color: var(--color4);
+}
+.bg-fourthcolor {
+  background-color: var(--color3);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.txt-maincolor{
+  color: var(--color2);
+}
+.txt-white{
+  color: white;
+}
+.txt-rojo{
+  color: rgb(255, 75, 75);
+}
+.txt-secondcolor{
+  color: var(--color1);
+}
+.txt-thirdcolor{
+  color: var(--color4);
+}
+.txt-fourthcolor{
+  color: var(--color3);
+}
+.txt-textcolor{
+  color: var(--Textos);
+}
+
+.txt-maincolor-hover:hover{
+  color: var(--color2);
+}
+.txt-rojo-hover:hover{
+  color: rgb(255, 75, 75);
+}
+.txt-secondcolor-hover:hover{
+  color: var(--color1);
+}
+.txt-thirdcolor-hover:hover{
+  color: var(--color4);
+}
+.txt-fourthcolor-hover:hover{
+  color: var(--color3);
+}
+
+.btn-maincolor{
+  border-color: var(--color2) !important;
+  color: var(--color2);
+}
+.btn-maincolor:hover{
+  background-color: var(--color2);
+  color: white;
+}
+.btn-white{
+  background-color: white;
+}
+.btn-red-hover:hover{
+  background-color: rgb(255, 75, 75);
+}
+
+.Link{
+  color: var(--Textos);
+  text-decoration: none;
+}
+.Link:hover{
+  color: var(--color2);
+}
+
+
+.cartas {
+  width: 60%;
+}
+.Contenido4{
+  padding: 20px;
+  align-items:flex-start;
+  justify-content: center;
+}
+#FotoRegistro{
+  width: 150px;
+}
+
+.blog-comment::before,
+.blog-comment::after,
+.blog-comment-form::before,
+.blog-comment-form::after{
+    content: "";
+	display: table;
+	clear: both;
+}
+
+.blog-comment ul{
+	list-style-type: none;
+	padding: 0;
+}
+
+.blog-comment img{
+	opacity: 1;
+	filter: Alpha(opacity=100);
+	-webkit-border-radius: 4px;
+	   -moz-border-radius: 4px;
+	  	 -o-border-radius: 4px;
+			border-radius: 4px;
+}
+
+.blog-comment img.avatar {
+	position: relative;
+	float: left;
+	margin-left: 0;
+	margin-top: 0;
+	width: 65px;
+	height: 65px;
+}
+
+.blog-comment .post-comments{
+	border: 1px solid #eee;
+    margin-bottom: 20px;
+    margin-left: 85px;
+	margin-right: 0px;
+    padding: 10px 20px;
+    position: relative;
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+       	 -o-border-radius: 4px;
+    		border-radius: 4px;
+	background: #fff;
+	color: #6b6e80;
+	position: relative;
+}
+
+.blog-comment .meta {
+	font-size: 13px;
+	color: #aaaaaa;
+	padding-bottom: 8px;
+	margin-bottom: 10px !important;
+	border-bottom: 1px solid #eee;
+}
+
+.blog-comment ul.comments ul{
+	list-style-type: none;
+	padding: 0;
+	margin-left: 85px;
+}
+
+.blog-comment-form{
+	padding-left: 15%;
+	padding-right: 15%;
+	padding-top: 40px;
+}
+
+.blog-comment h3,
+.blog-comment-form h3{
+	margin-bottom: 40px;
+	font-size: 26px;
+	line-height: 30px;
+	font-weight: 800;
+}
+
+.footerB {
+  position: static;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #252627;
+}
+
+.footerM {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; 
 }
 
 body {
-  font-family: 'Urbanist', sans-serif;
+  min-height: 100vh;
+  position: relative;
 }
