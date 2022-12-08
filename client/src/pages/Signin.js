@@ -21,7 +21,8 @@ export default function Signin() {
         }
         console.log(usuario)
         axios.post('/api/user/createuser', usuario).then(res => {
-            alert(res.data)
+            //alert(res.data)
+            console.log(res.data)
         }).then(err => {console.log(err)})
     }
 

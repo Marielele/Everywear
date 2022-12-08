@@ -15,6 +15,7 @@ const userModel = mongoose.model('users', userSchema);
 
 module.exports = router;
 
+//Crear
 router.post('/createuser', (req, res) => {
     const newUser = new userModel({
         nombre: req.body.nombre,
@@ -22,11 +23,26 @@ router.post('/createuser', (req, res) => {
         contra: req.body.contra,
         idU: req.body.idU
     })
-    newUser.save(function(err){
-        if(!err){
+    newUser.save(function (err) {
+        if (!err) {
             res.send('User added correctly!')
-        }else {
+        } else {
             res.send(err)
         }
     })
 })
+
+//Buscar
+router.post('/searchuser', (req, res) => {
+    userModel.findOne({ email: req.body.email, contra: req.body.contra }, function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            docs === null ? res.send('Datos incorrectos') :
+                res.send(docs)
+
+        }
+    })
+})
+
+//Actualizar

@@ -4,9 +4,15 @@ import userIcon from '../imgs/userProvis.png';
 import { Link } from 'react-router-dom';
 
 export const NavBar = () => {
-    let isOn = false;
+
+    function endSession() {
+        sessionStorage.clear();
+    }
+
+    let activeUser = sessionStorage.getItem('activeUser');
+    activeUser = JSON.parse(activeUser);
     return (
-        isOn ? <div>
+        activeUser != null ? <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-maincolor">
                 <div className="container-fluid">
                     <div id='logazo' className='text-light' >
@@ -28,7 +34,7 @@ export const NavBar = () => {
                         <ul className="dropdown-menu dropdown-menu-end">
                             <li>
                                 <Link className="dropdown-item">
-                                    Nombre de usuario
+                                    {activeUser.username}
                                 </Link>
                             </li>
                             <li><hr className="dropdown-divider" /></li>
@@ -65,7 +71,7 @@ export const NavBar = () => {
                             </li>
                             <li><hr className="dropdown-divider" /></li>
                             <li>
-                                <Link className="dropdown-item">
+                                <Link className="dropdown-item" onClick={endSession} to={`/login`}>
                                     Cerrar Sesion
                                 </Link>
                             </li>
