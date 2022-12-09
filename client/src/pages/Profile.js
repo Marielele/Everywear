@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavBar } from '../components/NavBar';
 import { LilFooter } from '../components/LilFooter';
 import prueba from '../imgs/no-image.png';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import uniqid from 'uniqid';
 
 export default function Profile() {
 
@@ -27,6 +28,30 @@ export default function Profile() {
     const [email, setEmail] = useState('');
     const [contra, setContra] = useState('');
 
+    const [tarjeta, setTarjeta] = useState('');
+    const [fechaVencimiento, setfechaVencimiento] = useState('');
+    const [cvv, setCvv] = useState('');
+
+    const [dataTarjetas, setDataTarjetas] = useState([]);
+
+    const [calle, setCalle] = useState('');
+    const [numero, setNumero] = useState('');
+    const [colonia, setColonia] = useState('');
+    const [codigoP, setCodigoP] = useState('');
+    const [municipio, setMunicipio] = useState('');
+    const [estado, setEstado] = useState('');
+
+    useEffect(() => {
+        const us = {
+            idU: activeUser.id
+        }
+        axios.post('api/paymethod/getpays', us).then(res => {
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [activeUser.id])
+
     function updateUser() {
         var upUser = {
             nombre: nombre,
@@ -46,8 +71,35 @@ export default function Profile() {
         }).then(err => { console.log(err) })
     }
 
-    function addPaymethod(){
-        
+    function addPaymethod() {
+        var card = {
+            tarjeta: tarjeta,
+            fechaVencimiento: fechaVencimiento,
+            cvv: cvv,
+            idTarjeta: 'CARD' + uniqid(),
+            idU: activeUser.id
+        }
+        axios.post('/api/paymethod/createpay', card).then(res => {
+            alert(res.data)
+            window.location.reload()
+        }).then(err => { console.log(err) })
+    }
+
+    function addShippingAddress() {
+        var address = {
+            calle: calle,
+            numero: numero,
+            colonia: colonia,
+            codigoP: codigoP,
+            municipio: municipio,
+            estado: estado,
+            idAddress: 'ADDRESS' + uniqid(),
+            idU: activeUser.id
+        }
+        axios.post('/api/address/createaddress', address).then(res => {
+            alert(res.data)
+            window.location.reload()
+        }).then(err => { console.log(err) })
     }
 
     return (
@@ -76,13 +128,13 @@ export default function Profile() {
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <i className="fas fa-user fa-lg me-3 fa-fw"></i>
-                                            <input type="text" id="txtNombre" name="txtNombre" value={nombre} onChange={(e) => { setNombre(e.target.value) }} placeholder={ activeUser.username } className="form-control" maxLength="50" />
+                                            <input type="text" id="txtNombre" name="txtNombre" value={nombre} onChange={(e) => { setNombre(e.target.value) }} placeholder={activeUser.username} className="form-control" maxLength="50" />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                                            <input type="email" id="txtCorreo" name="txtCorreo" className="form-control" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder={ activeUser.email } maxLength="50" />
+                                            <input type="email" id="txtCorreo" name="txtCorreo" className="form-control" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder={activeUser.email} maxLength="50" />
                                         </div>
                                     </div>
                                     <div className="form-group">
@@ -114,18 +166,18 @@ export default function Profile() {
                         <form id="formDireccion" name="formDireccion">
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Tarjeta" maxLength="50" />
+                                    <input type="text" id="txtNombre" name="txtNombre" value={tarjeta} onChange={(e) => { setTarjeta(e.target.value) }} className="form-control" placeholder="Tarjeta" maxLength="50" />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Fecha de vencimiento" maxLength="50" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={fechaVencimiento} onChange={(e) => { setfechaVencimiento(e.target.value) }} className="form-control" placeholder="Fecha de vencimiento" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="CVV" maxLength="4" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={cvv} onChange={(e) => { setCvv(e.target.value) }} className="form-control" placeholder="CVV" maxLength="4" />
                                     </div>
                                 </div>
                             </div>
@@ -146,39 +198,43 @@ export default function Profile() {
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Calle" maxLength="50" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={calle} onChange={(e) => { setCalle(e.target.value) }} className="form-control" placeholder="Calle" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Numero" maxLength="50" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={numero} onChange={(e) => { setNumero(e.target.value) }} className="form-control" placeholder="Numero" maxLength="50" />
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Colonia" maxLength="50" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={colonia} onChange={(e) => { setColonia(e.target.value) }} className="form-control" placeholder="Colonia" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Codigo Postal" maxLength="10" />
+                                        <input type="text" id="txtNombre" name="txtNombre" value={codigoP} onChange={(e) => { setCodigoP(e.target.value) }} className="form-control" placeholder="Codigo Postal" maxLength="10" />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Municipio" maxLength="50" />
+                                    <input type="text" id="txtNombre" name="txtNombre" value={municipio} onChange={(e) => { setMunicipio(e.target.value) }} className="form-control" placeholder="Municipio" maxLength="50" />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Estado" maxLength="50" />
+                                    <input type="text" id="txtNombre" name="txtNombre" value={estado} onChange={(e) => { setEstado(e.target.value) }} className="form-control" placeholder="Estado" maxLength="50" />
                                 </div>
                             </div>
                             <div className="tile-footer">
-                                <p align="right"><button id="btnActionForm" onClick={envioClose} className="btn btn-outline-success" type="button">Guardar</button></p>
+                                <p align="right">
+                                    <button id="btnActionForm" onClick={addShippingAddress} className="btn btn-outline-success" type="button">
+                                        Guardar
+                                    </button>
+                                </p>
                             </div>
                         </form>
                     </Modal.Body>
