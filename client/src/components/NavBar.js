@@ -59,14 +59,14 @@ export const NavBar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link className="dropdown-item" to={`/addShop`}>
+                                <Link className="dropdown-item" to={`/addshop`}>
                                     Registrar Tienda
                                 </Link>
                             </li>
                             <li><hr className="dropdown-divider" /></li>
                             <li>
-                                <Link className="dropdown-item" to={`/myShop`}>
-                                    Mi Tienda
+                                <Link className="dropdown-item" to={`/myshops`}>
+                                    Mis Tiendas
                                 </Link>
                             </li>
                             <li><hr className="dropdown-divider" /></li>

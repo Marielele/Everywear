@@ -36,7 +36,7 @@ router.post('/createpay', (req, res) => {
 
 //Obtener
 router.post('/getpays', (req, res) => {
-    payModel.find({ idU: req.body.idU }, function(docs, err){
+    payModel.find({ idU: req.body.idU }, function (docs, err) {
         if (!err) {
             res.send(docs)
         } else {
@@ -48,3 +48,12 @@ router.post('/getpays', (req, res) => {
 //Actualizar
 
 //Borrar
+router.post('/deletecard', (req, res) => {
+    payModel.findOneAndDelete({ idTarjeta: req.body.idTarjeta, idU: req.body.idU }, (err) => {
+        if(!err){
+            res.send('Card deleted!')
+        }else{
+            res.send(err)
+        }
+    })
+})

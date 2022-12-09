@@ -6,6 +6,7 @@ const bd = require('./connection');
 const userRoutes = require('./routes/user');
 const payRoutes = require('./routes/paymethod');
 const addressRoutes = require('./routes/address');
+const shopRoutes = require('./routes/shop');
 
 const bodyParser = require('body-parser');
 
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended:'true'}));
 app.use('/api/user', userRoutes);
 app.use('/api/paymethod', payRoutes);
 app.use('/api/address', addressRoutes);
+app.use('/api/shop', shopRoutes);
 
 app.use('/public', express.static(`${__dirname}/storage/imgs`));
 
