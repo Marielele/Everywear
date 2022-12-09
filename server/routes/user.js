@@ -38,7 +38,7 @@ router.post('/searchuser', (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            docs === null ? res.send('Datos incorrectos') :
+            docs === null ? console.log('Datos incorrectos') :
                 res.send(docs)
 
         }
@@ -46,3 +46,17 @@ router.post('/searchuser', (req, res) => {
 })
 
 //Actualizar
+router.post('/updateuser', (req, res) => {
+    const update = {
+        nombre: req.body.nombre,
+        email: req.body.email,
+        contra: req.body.contra
+    }
+    userModel.findOneAndUpdate({ idU: req.body.idU }, update, { new: true }, function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(docs)
+        }
+    })
+})
