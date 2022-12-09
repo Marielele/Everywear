@@ -24,7 +24,7 @@ function CardList({ card }) {
             <ul>
                 <li>
                     <div className='row mx-1 ' id={card.idTarjeta}>
-                        <div className="col-11">{card.tarjeta}, {card.cvv}</div>
+                        <div className="col-11">{card.tarjeta}, {card.fechaVencimiento}</div>
                         <button onClick={() => { deletePay(card.idTarjeta, activeUser.id) }} className="btn btn-outline-light txt-right txt-rojo-hover col-1 fw-bold border border-2 border-light">
                             <i className="fa-solid fa-x"></i>
                         </button>
