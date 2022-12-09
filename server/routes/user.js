@@ -48,7 +48,7 @@ router.post('/searchuser', (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            docs === null ? res.send("1") :
+            docs === null ? res.send('Datos incorrectos') :
                 res.send(docs)
 
         }

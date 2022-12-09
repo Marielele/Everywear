@@ -19,14 +19,17 @@ export default function Login() {
             contra: contra
         }
         axios.post('api/user/searchuser', serchedU).then(res => {
-            //alert(res.data)
-            var activeUser = {
-                username: res.data.nombre,
-                email: res.data.email,
-                id: res.data.idU
+            if(res.data === "Datos incorrectos"){
+                alert("Datos incorrectos")
+            } else {
+                var activeUser = {
+                    username: res.data.nombre,
+                    email: res.data.email,
+                    id: res.data.idU
+                }
+                sessionStorage.setItem('activeUser', JSON.stringify(activeUser))
+                navigate(`/`);
             }
-            sessionStorage.setItem('activeUser', JSON.stringify(activeUser))
-            navigate(`/`);
         }).then(err => {console.log(err)})
     }
 
