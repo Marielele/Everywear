@@ -6,8 +6,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import uniqid from 'uniqid';
+import CardList from '../components/CardList';
+import AddressList from '../components/AddressList';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
+
+    const navigate = useNavigate();
 
     let activeUser = sessionStorage.getItem('activeUser');
     activeUser = JSON.parse(activeUser);
@@ -41,16 +46,41 @@ export default function Profile() {
     const [municipio, setMunicipio] = useState('');
     const [estado, setEstado] = useState('');
 
+    const [dataDirecciones, setDataDirecciones] = useState([]);
+
     useEffect(() => {
         const us = {
             idU: activeUser.id
         }
         axios.post('api/paymethod/getpays', us).then(res => {
             console.log(res.data)
+            setDataTarjetas(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+        axios.post('api/address/getaddresses', us).then(res => {
+            console.log(res.data)
+            setDataDirecciones(res.data)
         }).catch(err => {
             console.log(err)
         })
     }, [activeUser.id])
+
+    const listaTarjetas = dataTarjetas.map(card => {
+        return(
+            <div>
+                <CardList card={card} />
+            </div>
+        )
+    })
+
+    const listaDirecciones = dataDirecciones.map(dire => {
+        return(
+            <div>
+                <AddressList dire={dire} />
+            </div>
+        )
+    })
 
     function updateUser() {
         var upUser = {
@@ -67,7 +97,7 @@ export default function Profile() {
                 id: res.data.idU
             }
             sessionStorage.setItem('activeUser', JSON.stringify(newActiveUser))
-            window.location.reload()
+            navigate(0)
         }).then(err => { console.log(err) })
     }
 
@@ -81,7 +111,7 @@ export default function Profile() {
         }
         axios.post('/api/paymethod/createpay', card).then(res => {
             alert(res.data)
-            window.location.reload()
+            navigate(0)
         }).then(err => { console.log(err) })
     }
 
@@ -98,7 +128,7 @@ export default function Profile() {
         }
         axios.post('/api/address/createaddress', address).then(res => {
             alert(res.data)
-            window.location.reload()
+            navigate(0)
         }).then(err => { console.log(err) })
     }
 
@@ -267,35 +297,17 @@ export default function Profile() {
                                 Agregar
                             </button>
                         </div>
-                        <ul>
-                            <li>
-                                <div className='row mx-1 '>
-                                    <div className="col-11">Tarjeta con terminacion 1234</div>
-                                    <button className="btn btn-outline-light txt-right txt-rojo-hover col-1 fw-bold border border-2 border-light">
-                                        <i className="fa-solid fa-x"></i>
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
+                        {listaTarjetas}
                     </div>
                     <br />
                     <div className="Perfil bg-thirdcolor w-100 txt-white">
                         <div className='row mx-1 mb-2'>
-                            <h4 className="text-left col-10" id=""> Direccion de envio </h4>
+                            <h4 className="text-left col-10" id=""> Direcciones de envio </h4>
                             <button className="btn btn-outline-light txt-right txt-thirdcolor-hover col-2 fw-bold border border-2 border-light" onClick={envioShow}>
                                 Agregar
                             </button>
                         </div>
-                        <ul>
-                            <li>
-                                <div className='row mx-1'>
-                                    <div className="col-11"> Calle #123, Colonia, Municipio, Estado</div>
-                                    <button className="btn btn-outline-light txt-right txt-rojo-hover col-1 fw-bold border border-2 border-light">
-                                        <i className="fa-solid fa-x"></i>
-                                    </button>
-                                </div>
-                            </li>
-                        </ul>
+                        {listaDirecciones}
                     </div>
                     <br />
                     <div className="row">

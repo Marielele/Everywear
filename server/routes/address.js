@@ -39,3 +39,25 @@ router.post('/createaddress', (req, res) => {
         }
     })
 })
+
+//Obtener
+router.post('/getaddresses', (req, res) => {
+    shipAddressModel.find({ idU: req.body.idU }, function(docs, err){
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+//Borrar
+router.post('/deleteaddress', (req, res) => {
+    shipAddressModel.findOneAndDelete({ idAddress: req.body.idAddress, idU: req.body.idU }, (err) => {
+        if(!err){
+            res.send('Address deleted!')
+        }else{
+            res.send(err)
+        }
+    })
+})
