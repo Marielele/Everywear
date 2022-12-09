@@ -5,6 +5,7 @@ import prueba from "../imgs/no-image.png";
 import { LilFooter } from '../components/LilFooter';
 import uniqid from 'uniqid';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const txtError = React.createRef();
 const btnRegistro = React.createRef();
@@ -20,12 +21,13 @@ var ValidarContra2 = false;
 
 export default function Signin() {
 
+    const navigate = useNavigate();
+
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [contra, setContra] = useState('');
     const [contra2, setContra2] = useState('');
     const [img, setImage] = useState('');
-
     
     function addUser(e) {
         e.preventDefault();
@@ -52,7 +54,7 @@ export default function Signin() {
                         formData.append("idU", usuario.idU)
                         axios.post('/api/user/createuser', formData).then(res => {
                             alert(res.data)
-                            window.location = "http://localhost:3000/login";
+                            navigate(`/login`);
                         }).then(err => {console.log(err)})
                     }
                     else {

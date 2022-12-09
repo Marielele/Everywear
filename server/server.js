@@ -16,7 +16,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/paymethod', payRoutes);
 app.use('/api/address', addressRoutes);
 
-app.use(express.static('uploads'));
+app.use('/public', express.static(`${__dirname}/storage/imgs`));
 
 app.get('/', (req, res) => {
     res.end('Server running...');

@@ -11,6 +11,9 @@ const userSchema = new schema({
     imgUrl: String,
     idU: String
 })
+userSchema.methods.setImgUrl = function setImgUrl (filename){
+    this.imgUrl = `http://localhost:3000/public/${filename}`
+}
 
 const userModel = mongoose.model('users', userSchema);
 
@@ -22,9 +25,7 @@ const upload = require('../libs/storage')
 //Crear
 router.post('/createuser', upload.single('txtImagen'), (req, res) => {
     var filename="";
-    if(req.file){
-        filename = req.file.filename;
-    }
+    
     const newUser = new userModel({
         nombre: req.body.txtNombre,
         email: req.body.txtCorreo,
@@ -32,6 +33,9 @@ router.post('/createuser', upload.single('txtImagen'), (req, res) => {
         imgUrl: filename,
         idU: req.body.idU
     })
+    if(req.file){
+        newUser.setImgUrl(req.file.filename)
+    }
     
     newUser.save(function (err) {
         if (!err) {

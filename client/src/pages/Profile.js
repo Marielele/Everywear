@@ -244,7 +244,7 @@ export default function Profile() {
                     <div className="Perfil bg-thirdcolor w-100 text-center">
                         <div className="row align-items-center" >
                             <div className="col-12 col-sm-3">
-                                <img src={prueba} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
+                                <img src={activeUser.imgUrl} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
                             </div>
                             <div className="col-12 col-sm-7 txt-white">
                                 <h3 className="mt-1" id="NombreCompleto"> {activeUser.username} </h3>
