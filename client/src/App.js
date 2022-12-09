@@ -5,6 +5,7 @@ import Signin from './pages/Signin';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Stores from './pages/Stores';
+import AddShop from './pages/AddShop';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/stores" element={<Stores />} />
+        <Route exact path="/addshop" element={<AddShop />} />
       </Routes>
     </div>
   );
