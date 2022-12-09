@@ -16,6 +16,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/paymethod', payRoutes);
 app.use('/api/address', addressRoutes);
 
+app.use(express.static('uploads'));
+
 app.get('/', (req, res) => {
     res.end('Server running...');
 })
