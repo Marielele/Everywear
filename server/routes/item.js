@@ -10,6 +10,7 @@ const itemSchema = new schema({
     descripcion: String,
     idProducto: String,
     idTienda: String,
+    nombreTienda: String,
     idU: String
 })
 
@@ -25,6 +26,7 @@ router.post('/createitem', (req, res) => {
         descripcion: req.body.descripcion,
         idProducto: req.body.idProducto,
         idTienda: req.body.idTienda,
+        nombreTienda: req.body.nombreTienda,
         idU: req.body.idU
     })
     newItem.save(function (err) {
@@ -39,6 +41,16 @@ router.post('/createitem', (req, res) => {
 //Obtener
 router.post('/getstoreitems', (req, res) => {
     itemModel.find({ idTienda: req.body.idTienda }, function (docs, err) {
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+router.post('/getdataitem', (req, res) => {
+    itemModel.findOne({ idProducto: req.body.idProducto }, function (docs, err) {
         if (!err) {
             res.send(docs)
         } else {

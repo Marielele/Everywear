@@ -9,6 +9,8 @@ const addressRoutes = require('./routes/address');
 const shopRoutes = require('./routes/shop');
 const itemRoutes = require('./routes/item');
 const employeRoutes = require('./routes/employe');
+const cartRoutes = require('./routes/cart');
+const wishRoutes = require('./routes/wishlist');
 
 const bodyParser = require('body-parser');
 
@@ -21,6 +23,8 @@ app.use('/api/address', addressRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/item', itemRoutes);
 app.use('/api/employe', employeRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/wishlist', wishRoutes);
 
 app.get('/', (req, res) => {
     res.end('Server running...');
