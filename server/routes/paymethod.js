@@ -35,8 +35,9 @@ router.post('/createpay', (req, res) => {
 })
 
 //Obtener
-router.post('/getpays', (req, res) => {
-    payModel.find({ idU: req.body.idU }, function(docs, err){
+router.get('/getpays/:id', (req, res) => {
+    const idUser = req.params.id;
+    payModel.find({ idU: idUser }, function(docs, err){
         if (!err) {
             res.send(docs)
         } else {

@@ -39,3 +39,16 @@ router.post('/createaddress', (req, res) => {
         }
     })
 })
+
+//Obtener
+
+router.get('/getadresses/:id', (req, res) => {
+    const idUser = req.params.id;
+    shipAddressModel.find({ idU: idUser }, function(docs, err){
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
