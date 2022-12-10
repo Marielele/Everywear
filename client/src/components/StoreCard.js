@@ -1,14 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function StoreCard() {
+function StoreCard({ tienda }) {
+
+    let activeUser = sessionStorage.getItem('activeUser');
+    activeUser = JSON.parse(activeUser);
+
     return (
         <div>
             <div className="col">
                 <div className="card text-bg-dark border-0">
                     <img src="https://cdn.logojoy.com/wp-content/uploads/20201113115006/45994495_padded_logo-600x600.png" className="card-img" alt="..." />
                     <div className="card-img-overlay h-100 d-flex flex-column justify-content-end">
-                        <Link className="stretched-link" to={`/shop`}></Link>
+                        <h5 className='card-title'>{tienda.nombre}</h5>
+                        {activeUser != null && tienda.idU === activeUser.id ?
+                            <Link className="stretched-link" to={`/myshop/${tienda.idTienda}`} /> :
+                            <Link className="stretched-link" to={`/shop/${tienda.idTienda}`} />}
                     </div>
                 </div>
             </div>
