@@ -9,6 +9,9 @@ import AddShop from './pages/AddShop';
 import MyShops from './pages/MyShops';
 import Shop from './pages/Shop';
 import MyShop from './pages/MyShop';
+import AddItem from './pages/AddItem';
+import Search from './pages/Search';
+import Statistics from './pages/Statistics';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
         <Route exact path="/myshops" element={<MyShops />} />
         <Route exact path="/shop/:idTienda" element={<Shop />} />
         <Route exact path="/myshop/:idTienda" element={<MyShop />} />
+        <Route exact path="/additem/:idTienda" element={<AddItem />} />
+        <Route exact path="/search" element={<Search />} />
+        <Route exact path="/statistics" element={<Statistics />} />
       </Routes>
     </div>
   );

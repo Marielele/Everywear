@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import prueba from '../imgs/no-image.png'
 import axios from 'axios';
+import ItemCard from '../components/ItemCard';
 
 export default function MyShop() {
 
@@ -22,14 +23,29 @@ export default function MyShop() {
     const empleadoClose = () => setEmpleadoShow(false);
     const empleadoShow = () => setEmpleadoShow(true);
 
+    const [dataItems, setDataItems] = useState([])
+
     useEffect(() => {
         axios.post('/api/shop/getstoredata', { idTienda: params.idTienda }).then(res => {
             console.log(res.data)
-            const datausuario = res.data
-            setNombre(datausuario.nombre)
-            setDescripcion(datausuario.descripcion)
+            const dataTienda = res.data
+            setNombre(dataTienda.nombre)
+            setDescripcion(dataTienda.descripcion)
+        })
+        axios.post('/api/item/getstoreitems', { idTienda: params.idTienda }).then(res =>{
+            setDataItems(res.data)
+        }).catch(err => {
+            console.log(err)
         })
     }, [params.idTienda])
+
+    const listaItems = dataItems.map(producto => {
+        return(
+            <div>
+                <ItemCard producto={producto} />
+            </div>
+        )
+    })
 
     return (
         <div>
@@ -106,33 +122,31 @@ export default function MyShop() {
                     </div>
                     <div className="row row-flex align-items-center" >
                         <div className=" col-sm-12 col-md-3 p-1">
-                            <Link to={`/addItem`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">Publicar articulo</Link>
+                            <Link to={`/additem/${params.idTienda}`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">
+                                Publicar articulo
+                            </Link>
                         </div>
                         <div className=" col-sm-12 col-md-3 p-1">
-                            <button className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button" onClick={empleadoShow}>Agregar Empleado</button>
+                            <button className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button" onClick={empleadoShow}>
+                                Agregar Empleado
+                            </button>
                         </div>
                         <div className=" col-sm-12 col-md-3 p-1">
-                            <Link to={`/statistics`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">Estadisticas</Link>
+                            <Link to={`/statistics`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">
+                                Estadisticas
+                            </Link>
                         </div>
                         <div className=" col-sm-12 col-md-3 p-1">
-                            <button className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button" onClick={editShow}>Editar Tienda</button>
+                            <button className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button" onClick={editShow}>
+                                Editar Tienda
+                            </button>
                         </div>
                     </div>
                     <br />
                     <hr className='mt-0 w-100' />
                     <h3 className='txt-textcolor'>Productos</h3>
                     <div className="row row-cols-1 row-cols-md-5 g-4 txt-textcolor">
-                        <div className='col'>
-                            <div className="card text-center">
-                                <img src="https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png" className="card-img-top" alt="..." />
-                                <div className="card-body">
-                                    <h5 className="card-title">Nombre Articulo</h5>
-                                    <hr className='mt-0 mb-2' />
-                                    <p className="card-text">$$$Precio</p>
-                                    <Link to={`/articulo`} className="stretched-link"></Link>
-                                </div>
-                            </div>
-                        </div>
+                        {listaItems}
                     </div>
                 </div>
             </div>

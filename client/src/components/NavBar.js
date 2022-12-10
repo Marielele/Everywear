@@ -24,7 +24,9 @@ export const NavBar = () => {
                     <div id='buscadora' >
                         <form className="d-flex" role="search">
                             <input className="form-control me-2 col-lg-8" type="search" aria-label="Search" />
-                            <a className="btn btn-outline-light border border-2 border-light fw-bold txt-maincolor-hover" href="/busqueda">Buscar</a>
+                            <Link className="btn btn-outline-light border border-2 border-light fw-bold txt-maincolor-hover" to={'/search'}>
+                                Buscar
+                            </Link>
                         </form>
                     </div>
                     <div className="dropdown-center">
@@ -93,7 +95,7 @@ export const NavBar = () => {
                             <input className="form-control me-2 col-lg-8" type="search" aria-label="Search" />
                             <Link className="btn btn-outline-light border border-2 border-light fw-bold txt-maincolor-hover" to={'/search'}>
                                 Buscar
-                                </Link>
+                            </Link>
                         </form>
                     </div>
                     <div className="dropdown-center">

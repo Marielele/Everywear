@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavBar } from '../components/NavBar'
 import { Footer } from '../components/Footer'
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import ItemCard from '../components/ItemCard';
 
 export default function Shop() {
 
@@ -11,6 +12,8 @@ export default function Shop() {
     const [nombre, setNombre] = useState('')
     const [descripcion, setDescripcion] = useState('')
 
+    const [dataItems, setDataItems] = useState([])
+
     useEffect(() => {
         axios.post('/api/shop/getstoredata', { idTienda: params.idTienda }).then(res => {
             console.log(res.data)
@@ -18,7 +21,20 @@ export default function Shop() {
             setNombre(datausuario.nombre)
             setDescripcion(datausuario.descripcion)
         })
+        axios.post('/api/item/getstoreitems', { idTienda: params.idTienda }).then(res => {
+            setDataItems(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
     }, [params.idTienda])
+
+    const listaItems = dataItems.map(producto => {
+        return(
+            <div>
+                <ItemCard producto={producto} />
+            </div>
+        )
+    })
 
     return (
         <div>
@@ -44,17 +60,7 @@ export default function Shop() {
                 <hr className='mt-0 w-100' />
                 <h3 className='txt-textcolor'>Productos</h3>
                 <div className="row row-cols-1 row-cols-md-5 g-4 txt-textcolor">
-                    <div className='col'>
-                        <div className="card text-center">
-                            <img src="https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png" className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h5 className="card-title">Nombre Articulo</h5>
-                                <hr className='mt-0 mb-2' />
-                                <p className="card-text">$$$Precio</p>
-                                <Link className="stretched-link" to={`/articulo`} />
-                            </div>
-                        </div>
-                    </div>
+                    {listaItems}
                 </div>
             </div>
             <Footer />
