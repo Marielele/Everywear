@@ -13,6 +13,7 @@ export default function MyShop() {
 
     const [nombre, setNombre] = useState('')
     const [descripcion, setDescripcion] = useState('')
+    const [image, setImage] = useState('')
 
     const [showEdit, seteditShow] = useState(false);
     const editClose = () => seteditShow(false);
@@ -28,6 +29,7 @@ export default function MyShop() {
             const datausuario = res.data
             setNombre(datausuario.nombre)
             setDescripcion(datausuario.descripcion)
+            setImage(datausuario.imgUrl)
         })
     }, [params.idTienda])
 
@@ -43,14 +45,7 @@ export default function MyShop() {
                     <Modal.Body>
                         <form id="formPerfil" name="formPerfil">
                             <div className="row">
-                                <div id="Imagenes" className="col-5 align-items-center">
-                                    <img src={prueba} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
-                                    <input type="file" name="txtImagen" id="txtImagen" className="inputUploadFile" accept="image/*" />
-                                    <label htmlFor="txtImagen" id="btnUploadfile" className="btn btn-outline-success my-2">Cargar Imagen</label>
-                                    <label htmlFor="" className="btn btn-outline-danger my-2">Eliminar</label>
-                                    <br />
-                                </div>
-                                <div className="col-7">
+                                <div className="col-12">
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Nombre de la tienda" maxLength="50" />
@@ -91,7 +86,7 @@ export default function MyShop() {
                 <div className="container mt-4 mb-5">
                     <div className="row row-flex align-items-center my-2" >
                         <div className="col-sm-12 col-md-3">
-                            <img src="https://www.nbmchealth.com/wp-content/uploads/2018/04/default-placeholder.png" className="card-img-top  mx-auto rounded align-center" alt="..." />
+                            <img src={image} className="card-img-top  mx-auto rounded align-center" alt="..." />
                         </div>
                         <div className="Perfil bg-thirdcolor h-25 col-sm-12 col-md-9 mt-sm-2 txt-white ">
                             <div className="row" >
