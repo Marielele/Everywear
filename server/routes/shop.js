@@ -33,13 +33,17 @@ router.post('/createshop', upload.single('txtImagen'), (req, res) => {
     if(req.file){
         newShop.setImgUrl(req.file.filename)
     }
-    newShop.save(function (err) {
-        if (!err) {
-            res.send('Shop created!')
-        } else {
-            res.send(err)
-        }
-    })
+    if(newShop.nombre && newShop.descripcion && newShop.idU){
+        newShop.save(function (err) {
+            if (!err) {
+                res.send('Shop created!')
+            } else {
+                res.send(err)
+            }
+        })
+    } else {
+        res.send('Faltan datos')
+    }
 })
 
 //Obtener

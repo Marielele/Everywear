@@ -31,13 +31,17 @@ router.post('/createaddress', (req, res) => {
         idAddress: req.body.idAddress,
         idU: req.body.idU
     })
-    newAdd.save(function (err) {
-        if (!err) {
-            res.send('Shipping address added!')
-        } else {
-            res.send(err)
-        }
-    })
+    if (newAdd.calle && newAdd.numero && newAdd.colonia && newAdd.codigoP && newAdd.municipio && newAdd.estado && newAdd.idU){
+        newAdd.save(function (err) {
+            if (!err) {
+                res.send('Shipping address added!')
+            } else {
+                res.send(err)
+            }
+        })
+    } else {
+        res.send('Faltan datos')
+    }
 })
 
 //Obtener

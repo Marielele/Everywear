@@ -25,7 +25,6 @@ const upload = require('../libs/storage')
 //Crear
 router.post('/createuser', upload.single('txtImagen'), (req, res) => {
     var filename="";
-    
     const newUser = new userModel({
         nombre: req.body.txtNombre,
         email: req.body.txtCorreo,
@@ -33,17 +32,20 @@ router.post('/createuser', upload.single('txtImagen'), (req, res) => {
         imgUrl: filename,
         idU: req.body.idU
     })
-    if(req.file){
-        newUser.setImgUrl(req.file.filename)
-    }
-    
-    newUser.save(function (err) {
-        if (!err) {
-            res.send('User added correctly!')
-        } else {
-            res.send(err)
+    if(newUser.nombre && newUser.email && newUser.contra && newUser.idU){
+        if(req.file){
+            newUser.setImgUrl(req.file.filename)
         }
-    })
+        newUser.save(function (err) {
+            if (!err) {
+                res.send('User added correctly!')
+            } else {
+                res.send(err)
+            }
+        })
+    } else {
+        res.send('Faltan datos')
+    }
 })
 
 //Buscar

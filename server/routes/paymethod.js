@@ -25,13 +25,17 @@ router.post('/createpay', (req, res) => {
         idTarjeta: req.body.idTarjeta,
         idU: req.body.idU
     })
-    newPay.save(function (err) {
-        if (!err) {
-            res.send('Paymethod added!')
-        } else {
-            res.send(err)
-        }
-    })
+    if (newPay.tarjeta && newPay.fechaVencimiento && newPay.cvv && newPay.idU){
+        newPay.save(function (err) {
+            if (!err) {
+                res.send('Paymethod added!')
+            } else {
+                res.send(err)
+            }
+        })
+    } else {
+        res.send('Faltan datos')
+    }
 })
 
 //Obtener
