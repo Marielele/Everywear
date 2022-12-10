@@ -26,7 +26,7 @@ app.use('/api/item', itemRoutes);;
 app.use('/api/employe', employeRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishRoutes);
-app.use('/public', express.static(`${__dirname}/storage/imgs`));
+app.use('/public', express.static(`${__dirname}/storage`));
 app.use('/api/comment', commentRoutes);
 
 app.get('/', (req, res) => {
