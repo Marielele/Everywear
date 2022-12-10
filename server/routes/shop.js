@@ -62,3 +62,18 @@ router.post('/getstoredata', (req, res) => {
         }
     })
 })
+
+//Editar
+router.post('/updateshop', (req, res) => {
+    const update = {
+        nombre: req.body.nombre,
+        descripcion: req.body.descripcion
+    }
+    shopModel.findOneAndUpdate({ idTienda: req.body.idTienda }, update, { new: true }, function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(docs)
+        }
+    })
+})

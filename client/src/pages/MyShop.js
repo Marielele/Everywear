@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Footer } from '../components/Footer'
 import { NavBar } from '../components/NavBar'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import prueba from '../imgs/no-image.png'
 import axios from 'axios';
 import ItemCard from '../components/ItemCard';
+import uniqid from 'uniqid'
 
 export default function MyShop() {
+
+    const navigate = useNavigate()
 
     const params = useParams()
 
@@ -23,6 +26,8 @@ export default function MyShop() {
     const empleadoClose = () => setEmpleadoShow(false);
     const empleadoShow = () => setEmpleadoShow(true);
 
+    const [nombreEmpleado, setNombreEmpleado] = useState('')
+
     const [dataItems, setDataItems] = useState([])
 
     useEffect(() => {
@@ -32,7 +37,7 @@ export default function MyShop() {
             setNombre(dataTienda.nombre)
             setDescripcion(dataTienda.descripcion)
         })
-        axios.post('/api/item/getstoreitems', { idTienda: params.idTienda }).then(res =>{
+        axios.post('/api/item/getstoreitems', { idTienda: params.idTienda }).then(res => {
             setDataItems(res.data)
         }).catch(err => {
             console.log(err)
@@ -40,12 +45,50 @@ export default function MyShop() {
     }, [params.idTienda])
 
     const listaItems = dataItems.map(producto => {
-        return(
+        return (
             <div>
                 <ItemCard producto={producto} />
             </div>
         )
     })
+
+    function updateStore() {
+        var upStore = {
+            nombre: nombre,
+            descripcion: descripcion,
+            idTienda: params.idTienda
+        }
+        axios.post('/api/shop/updateshop', upStore).then(res => {
+            alert('Usuario actualizado')
+            navigate(0)
+        }).then(err => { console.log(err) })
+    }
+
+    function addEmploye() {
+        axios.post('/api/user/getuser', { nombre: nombreEmpleado }).then(res => {
+            console.log(res.data)
+            if (res.data != null) {
+
+                var empleado = {
+                    nombreEmpleado: nombreEmpleado,
+                    idTienda: params.idTienda,
+                    idEmpleado: 'EMPLOYE' + uniqid(),
+                    idU: res.data.idU
+                }
+                console.log(empleado)
+                axios.post('/api/employe/createemploye', empleado).then(res => {
+                    alert('Empleado agregado')
+                    //console.log(res.data)
+                }).then(err => { console.log(err) })
+
+            } else {
+                console.log('No existe el usuario')
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
 
     return (
         <div>
@@ -69,18 +112,22 @@ export default function MyShop() {
                                 <div className="col-7">
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
-                                            <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Nombre de la tienda" maxLength="50" />
+                                            <input value={nombre} onChange={(e) => { setNombre(e.target.value) }} type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder={nombre} maxLength="50" />
                                         </div>
                                     </div>
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
-                                            <textarea id="txtDescripcion" name="txtDescripcion" placeholder="Descripcion" className="form-control" rows="5" required maxLength="250"></textarea>
+                                            <textarea value={descripcion} onChange={(e) => { setDescripcion(e.target.value) }} id="txtDescripcion" name="txtDescripcion" placeholder={descripcion} className="form-control" rows="5" required maxLength="250"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="tile-footer">
-                                <p align="right"><button id="btnActionForm" onClick={editClose} className="btn btn-outline-success" type="button">Guardar</button></p>
+                                <p align="right">
+                                    <button id="btnActionForm" onClick={updateStore} className="btn btn-outline-success" type="button">
+                                        Guardar
+                                    </button>
+                                </p>
                             </div>
                         </form>
                     </Modal.Body>
@@ -94,12 +141,16 @@ export default function MyShop() {
                         <form id="formEmpleado" name="formEmpleado">
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-4">
-                                    <input type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Nombre del usuario" maxLength="50" />
+                                    <input value={nombreEmpleado} onChange={(e) => { setNombreEmpleado(e.target.value) }} type="text" id="txtNombre" name="txtNombre" className="form-control" placeholder="Nombre del usuario" maxLength="50" />
                                 </div>
                             </div>
 
                             <div className="tile-footer">
-                                <p align="right"><button id="btnActionForm" onClick={empleadoClose} className="btn btn-outline-success" type="button">Guardar</button></p>
+                                <p align="right">
+                                    <button id="btnActionForm" onClick={addEmploye} className="btn btn-outline-success" type="button">
+                                        Guardar
+                                    </button>
+                                </p>
                             </div>
                         </form>
                     </Modal.Body>

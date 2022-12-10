@@ -45,6 +45,18 @@ router.post('/searchuser', (req, res) => {
     })
 })
 
+router.post('/getuser', (req, res) => {
+    userModel.findOne({ nombre: req.body.nombre }, function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            docs === null ? console.log('No existe') :
+                res.send(docs)
+
+        }
+    })
+})
+
 //Actualizar
 router.post('/updateuser', (req, res) => {
     const update = {
