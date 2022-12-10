@@ -11,6 +11,7 @@ const itemRoutes = require('./routes/item');
 const employeRoutes = require('./routes/employe');
 const cartRoutes = require('./routes/cart');
 const wishRoutes = require('./routes/wishlist');
+const commentRoutes = require('./routes/comments')
 
 const bodyParser = require('body-parser');
 
@@ -21,12 +22,12 @@ app.use('/api/user', userRoutes);
 app.use('/api/paymethod', payRoutes);
 app.use('/api/address', addressRoutes);
 app.use('/api/shop', shopRoutes);
-app.use('/api/item', itemRoutes);
+app.use('/api/item', itemRoutes);;
 app.use('/api/employe', employeRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishRoutes);
-
 app.use('/public', express.static(`${__dirname}/storage/imgs`));
+app.use('/api/comment', commentRoutes);
 
 app.get('/', (req, res) => {
     res.end('Server running...');
