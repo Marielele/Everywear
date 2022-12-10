@@ -132,7 +132,7 @@ export default function MyShop() {
                             </button>
                         </div>
                         <div className=" col-sm-12 col-md-3 p-1">
-                            <Link to={`/statistics`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">
+                            <Link to={`/statistics/${params.idTienda}`} className="btn btn-outline-thirdcolor my-2 my-sm-0 w-100" type="button">
                                 Estadisticas
                             </Link>
                         </div>

@@ -10,6 +10,10 @@ const itemSchema = new schema({
     descripcion: String,
     idProducto: String,
     idTienda: String,
+    cantidadVendida: {
+        type: Number,
+        default: 0
+    },
     idU: String
 })
 
@@ -39,6 +43,29 @@ router.post('/createitem', (req, res) => {
 //Obtener
 router.post('/getstoreitems', (req, res) => {
     itemModel.find({ idTienda: req.body.idTienda }, function (docs, err) {
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+//Obtener stasdisticas de tienda
+router.get('/getsolditems/:id', (req, res) => {
+    const storeID = req.params.id;
+    itemModel.find({ idTienda: storeID }, function(docs, err){
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+router.get('/getstoreitemstatistics/:id', (req, res) => {
+    const storeID = req.params.id;
+    itemModel.find({ idTienda: storeID }, function(docs, err){
         if (!err) {
             res.send(docs)
         } else {

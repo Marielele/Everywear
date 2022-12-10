@@ -28,7 +28,8 @@ function App() {
         <Route exact path="/myshop/:idTienda" element={<MyShop />} />
         <Route exact path="/additem/:idTienda" element={<AddItem />} />
         <Route exact path="/search" element={<Search />} />
-        <Route exact path="/statistics" element={<Statistics />} />
+        <Route exact path="/statistics/:idTienda" element={<Statistics />} />
+        <Route exact path="/comment/:idTienda" element={<Statistics />} />
       </Routes>
     </div>
   );

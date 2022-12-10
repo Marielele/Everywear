@@ -8,6 +8,7 @@ const payRoutes = require('./routes/paymethod');
 const addressRoutes = require('./routes/address');
 const shopRoutes = require('./routes/shop');
 const itemRoutes = require('./routes/item')
+const commentRoutes = require('./routes/comments')
 
 const bodyParser = require('body-parser');
 
@@ -18,8 +19,8 @@ app.use('/api/user', userRoutes);
 app.use('/api/paymethod', payRoutes);
 app.use('/api/address', addressRoutes);
 app.use('/api/shop', shopRoutes);
-app.use('/api/item', itemRoutes)
-
+app.use('/api/item', itemRoutes);
+app.use('/api/comment', commentRoutes);
 app.get('/', (req, res) => {
     res.end('Server running...');
 })
