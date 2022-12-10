@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import userIcon from '../imgs/userProvis.png'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import prueba from "../imgs/no-image.png";
 
 export default function Login() {
 
@@ -19,14 +20,24 @@ export default function Login() {
             contra: contra
         }
         axios.post('api/user/searchuser', serchedU).then(res => {
-            //alert(res.data)
-            var activeUser = {
-                username: res.data.nombre,
-                email: res.data.email,
-                id: res.data.idU
+            if(res.data === "Datos incorrectos"){
+                alert("Datos incorrectos")
+            } else {
+                var ruta = ""
+                if(res.data.imgUrl === ""){
+                    res.data.imgUrl = prueba
+                } else {
+                    res.data.imgUrl = res.data.imgUrl
+                }
+                var activeUser = {
+                    username: res.data.nombre,
+                    email: res.data.email,
+                    imgUrl: res.data.imgUrl,
+                    id: res.data.idU
+                }
+                sessionStorage.setItem('activeUser', JSON.stringify(activeUser))
+                navigate(`/`);
             }
-            sessionStorage.setItem('activeUser', JSON.stringify(activeUser))
-            navigate(`/`);
         }).then(err => {console.log(err)})
     }
 

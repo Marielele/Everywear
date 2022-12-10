@@ -26,6 +26,8 @@ app.use('/api/employe', employeRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/wishlist', wishRoutes);
 
+app.use('/public', express.static(`${__dirname}/storage/imgs`));
+
 app.get('/', (req, res) => {
     res.end('Server running...');
 })

@@ -10,7 +10,7 @@ function StoreCard({ tienda }) {
         <div>
             <div className="col">
                 <div className="card text-bg-dark border-0">
-                    <img src="https://cdn.logojoy.com/wp-content/uploads/20201113115006/45994495_padded_logo-600x600.png" className="card-img" alt="..." />
+                    <img src={tienda.imgUrl} className="card-img" alt="..." />
                     <div className="card-img-overlay h-100 d-flex flex-column justify-content-end">
                         <h5 className='card-title'>{tienda.nombre}</h5>
                         {activeUser != null && tienda.idU === activeUser.id ?

@@ -8,28 +8,44 @@ const userSchema = new schema({
     nombre: String,
     email: String,
     contra: String,
+    imgUrl: String,
     idU: String
 })
+userSchema.methods.setImgUrl = function setImgUrl (filename){
+    this.imgUrl = `http://localhost:3000/public/${filename}`
+}
 
 const userModel = mongoose.model('users', userSchema);
 
 module.exports = router;
 
+const multer = require('multer');
+const upload = require('../libs/storage')
+
 //Crear
-router.post('/createuser', (req, res) => {
+router.post('/createuser', upload.single('txtImagen'), (req, res) => {
+    var filename="";
     const newUser = new userModel({
-        nombre: req.body.nombre,
-        email: req.body.email,
-        contra: req.body.contra,
+        nombre: req.body.txtNombre,
+        email: req.body.txtCorreo,
+        contra: req.body.txtContra,
+        imgUrl: filename,
         idU: req.body.idU
     })
-    newUser.save(function (err) {
-        if (!err) {
-            res.send('User added correctly!')
-        } else {
-            res.send(err)
+    if(newUser.nombre && newUser.email && newUser.contra && newUser.idU){
+        if(req.file){
+            newUser.setImgUrl(req.file.filename)
         }
-    })
+        newUser.save(function (err) {
+            if (!err) {
+                res.send('User added correctly!')
+            } else {
+                res.send(err)
+            }
+        })
+    } else {
+        res.send('Faltan datos')
+    }
 })
 
 //Buscar
@@ -38,9 +54,20 @@ router.post('/searchuser', (req, res) => {
         if (err) {
             console.log(err)
         } else {
-            docs === null ? console.log('Datos incorrectos') :
+            docs === null ? res.send('Datos incorrectos') :
                 res.send(docs)
 
+        }
+    })
+})
+
+router.post('/searchemail', (req, res) => {
+    userModel.findOne({ email: req.body.email }, function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            docs !== null ? res.send('Email en uso') :
+                res.send("1")
         }
     })
 })
@@ -52,7 +79,6 @@ router.post('/getuser', (req, res) => {
         } else {
             docs === null ? console.log('No existe') :
                 res.send(docs)
-
         }
     })
 })

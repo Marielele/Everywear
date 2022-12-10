@@ -10,9 +10,14 @@ import CardList from '../components/CardList';
 import AddressList from '../components/AddressList';
 import { useNavigate } from 'react-router-dom';
 
+const txtImagen = React.createRef();
+const imageRef = React.createRef();
+const formPerfil = React.createRef();
+
 export default function Profile() {
 
     const navigate = useNavigate();
+    const [img, setImage] = useState('');
 
     let activeUser = sessionStorage.getItem('activeUser');
     activeUser = JSON.parse(activeUser);
@@ -68,68 +73,121 @@ export default function Profile() {
 
     const listaTarjetas = dataTarjetas.map(card => {
         return(
-            <div>
-                <CardList card={card} />
+            <div key={card.idTarjeta}>
+                <CardList card={card}/>
             </div>
         )
     })
 
     const listaDirecciones = dataDirecciones.map(dire => {
         return(
-            <div>
+            <div key={dire.idAddress}>
                 <AddressList dire={dire} />
             </div>
         )
     })
 
-    function updateUser() {
+    function updateUser(e) {
+        e.preventDefault();
         var upUser = {
-            nombre: nombre,
-            email: email,
-            contra: contra,
-            idU: activeUser.id
+            idU: activeUser.id,
+            imgUrl: activeUser.imgUrl
         }
+        if(nombre !== ""){
+            upUser.nombre = nombre
+        }
+        if(email !== ""){
+            upUser.email = email
+        }
+        if(contra !== ""){
+            upUser.contra = contra
+        }
+        
         axios.post('api/user/updateuser', upUser).then(res => {
             alert('Usuario actualizado')
             var newActiveUser = {
                 username: res.data.nombre,
                 email: res.data.email,
-                id: res.data.idU
+                id: res.data.idU,
+                imgUrl: res.data.imgUrl
             }
             sessionStorage.setItem('activeUser', JSON.stringify(newActiveUser))
             navigate(0)
         }).then(err => { console.log(err) })
     }
 
-    function addPaymethod() {
-        var card = {
-            tarjeta: tarjeta,
-            fechaVencimiento: fechaVencimiento,
-            cvv: cvv,
-            idTarjeta: 'CARD' + uniqid(),
-            idU: activeUser.id
+    function onChangeIMG(){
+        console.log(txtImagen.current.files);
+        var files = txtImagen.current.files;
+        var element;
+        var supportedImages = ["image/jpeg", "image/png"];
+        var limite_kb = 5000;
+        var setEncontraronElementosNoValidos = false;
+        for(var i = 0; i < files.length; i++){
+            element = files[i];
+            if (supportedImages.indexOf(element.type) !== -1 && element.size <= limite_kb * 1024){
+                var imgCodified = URL.createObjectURL(element);
+                console.log(imageRef);
+                imageRef.current.setAttribute("src", imgCodified);
+    
+            }
+            else {
+                setEncontraronElementosNoValidos= true;
+            }
         }
-        axios.post('/api/paymethod/createpay', card).then(res => {
-            alert(res.data)
-            navigate(0)
-        }).then(err => { console.log(err) })
+        if(files.length > 0){
+            if(setEncontraronElementosNoValidos){
+                alert("Formato o tamaño invalido");
+            }
+            else{
+                setImage(txtImagen.current.files);
+                alert("Archivo subido correctamente" );
+            }
+        }
+    }
+
+    function borrarImagen(){
+        imageRef.current.setAttribute("src", prueba);
+        txtImagen.current.value = "";
+    }
+
+    function addPaymethod() {
+        if(tarjeta!== "" && fechaVencimiento !== "" && cvv !== ""){
+            var card = {
+                tarjeta: tarjeta,
+                fechaVencimiento: fechaVencimiento,
+                cvv: cvv,
+                idTarjeta: 'CARD' + uniqid(),
+                idU: activeUser.id
+            }
+            axios.post('/api/paymethod/createpay', card).then(res => {
+                alert(res.data)
+                navigate(0)
+            }).then(err => { console.log(err) })
+        } else {
+            alert("Faltan datos")
+        }
     }
 
     function addShippingAddress() {
-        var address = {
-            calle: calle,
-            numero: numero,
-            colonia: colonia,
-            codigoP: codigoP,
-            municipio: municipio,
-            estado: estado,
-            idAddress: 'ADDRESS' + uniqid(),
-            idU: activeUser.id
+        if(calle!== "" && numero !== "" && colonia !== "" && codigoP !== "" && municipio !== "" && estado !== ""){
+            var address = {
+                calle: calle,
+                numero: numero,
+                colonia: colonia,
+                codigoP: codigoP,
+                municipio: municipio,
+                estado: estado,
+                idAddress: 'ADDRESS' + uniqid(),
+                idU: activeUser.id
+            }
+            axios.post('/api/address/createaddress', address).then(res => {
+                alert(res.data)
+                navigate(0)
+            }).then(err => { console.log(err) })
+        } else {
+            alert("Faltan datos")
         }
-        axios.post('/api/address/createaddress', address).then(res => {
-            alert(res.data)
-            navigate(0)
-        }).then(err => { console.log(err) })
     }
 
     return (
@@ -145,16 +203,16 @@ export default function Profile() {
                         </Button>
                     </Modal.Header>
                     <Modal.Body>
-                        <form id="formPerfil" name="formPerfil">
+                        <form id="formPerfil" name="formPerfil" ref={formPerfil} onSubmit={updateUser}>
                             <div className="row">
-                                <div id="Imagenes" className="col-5 align-items-center">
-                                    <img src={prueba} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
-                                    <input type="file" name="txtImagen" id="txtImagen" className="inputUploadFile" accept="image/*" />
+                                {/*<div id="Imagenes" className="col-5 align-items-center">
+                                     <img src={activeUser.imgUrl} ref={imageRef} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
+                                    <input type="file" ref={txtImagen} name="txtImagen" id="txtImagen" className="inputUploadFile" accept="image/*" onChange={onChangeIMG}/>
                                     <label htmlFor="txtImagen" id="btnUploadfile" className="btn btn-outline-success my-2">Cargar Imagen</label>
-                                    <label htmlFor="" className="btn btn-outline-danger my-2">Eliminar</label>
+                                    <label htmlFor="" className="btn btn-outline-danger my-2" onClick={borrarImagen}>Eliminar</label>
                                     <br />
-                                </div>
-                                <div className="col-7">
+                                </div> */}
+                                <div className="col-12">
                                     <div className="form-group">
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <i className="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -171,7 +229,7 @@ export default function Profile() {
                                         <div className="d-flex flex-row align-items-center mb-4">
                                             <i className="fas fa-key fa-lg me-3 fa-fw"></i>
                                             <input type="password" id="txtContraseña" name="txtContraseña" value={contra} onChange={(e) => { setContra(e.target.value) }} className="form-control" placeholder="Contraseña" maxLength="20" />
-                                            <i className="fas fa-eye fa-lg me-3 fa-fw" id="mostrar" type="button"></i>
+                                            {/*<i className="fas fa-eye fa-lg me-3 fa-fw" id="mostrar" type="button"></i>*/}
                                         </div>
                                     </div>
                                 </div>
@@ -179,7 +237,7 @@ export default function Profile() {
                             <label hidden id="ErrorContraseña">Errores en la contraseña:</label>
                             <div className="tile-footer">
                                 <p align="right">
-                                    <button id="btnActionForm" onClick={updateUser} className="btn btn-outline-success" type="button">
+                                    <button id="btnActionForm" className="btn btn-outline-success" type="submit">
                                         Guardar
                                     </button>
                                 </p>
@@ -196,18 +254,18 @@ export default function Profile() {
                         <form id="formDireccion" name="formDireccion">
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" value={tarjeta} onChange={(e) => { setTarjeta(e.target.value) }} className="form-control" placeholder="Tarjeta" maxLength="50" />
+                                    <input type="text" id="txtTarjeta" name="txtTarjeta" value={tarjeta} onChange={(e) => { setTarjeta(e.target.value) }} className="form-control" placeholder="Tarjeta" maxLength="50" />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={fechaVencimiento} onChange={(e) => { setfechaVencimiento(e.target.value) }} className="form-control" placeholder="Fecha de vencimiento" maxLength="50" />
+                                        <input type="text" id="txtVencimiento" name="txtVencimiento" value={fechaVencimiento} onChange={(e) => { setfechaVencimiento(e.target.value) }} className="form-control" placeholder="Fecha de vencimiento" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={cvv} onChange={(e) => { setCvv(e.target.value) }} className="form-control" placeholder="CVV" maxLength="4" />
+                                        <input type="text" id="txtCVV" name="txtCVV" value={cvv} onChange={(e) => { setCvv(e.target.value) }} className="form-control" placeholder="CVV" maxLength="4" />
                                     </div>
                                 </div>
                             </div>
@@ -228,35 +286,35 @@ export default function Profile() {
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={calle} onChange={(e) => { setCalle(e.target.value) }} className="form-control" placeholder="Calle" maxLength="50" />
+                                        <input type="text" id="txtCalle" name="txtCalle" value={calle} onChange={(e) => { setCalle(e.target.value) }} className="form-control" placeholder="Calle" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={numero} onChange={(e) => { setNumero(e.target.value) }} className="form-control" placeholder="Numero" maxLength="50" />
+                                        <input type="text" id="txtNumero" name="txtNumero" value={numero} onChange={(e) => { setNumero(e.target.value) }} className="form-control" placeholder="Numero" maxLength="50" />
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={colonia} onChange={(e) => { setColonia(e.target.value) }} className="form-control" placeholder="Colonia" maxLength="50" />
+                                        <input type="text" id="txtColonia" name="txtColonia" value={colonia} onChange={(e) => { setColonia(e.target.value) }} className="form-control" placeholder="Colonia" maxLength="50" />
                                     </div>
                                 </div>
                                 <div className="form-group col">
                                     <div className="d-flex flex-row align-items-center mb-2">
-                                        <input type="text" id="txtNombre" name="txtNombre" value={codigoP} onChange={(e) => { setCodigoP(e.target.value) }} className="form-control" placeholder="Codigo Postal" maxLength="10" />
+                                        <input type="text" id="txtcodigoP" name="txtcodigoP" value={codigoP} onChange={(e) => { setCodigoP(e.target.value) }} className="form-control" placeholder="Codigo Postal" maxLength="10" />
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" value={municipio} onChange={(e) => { setMunicipio(e.target.value) }} className="form-control" placeholder="Municipio" maxLength="50" />
+                                    <input type="text" id="txtMunicipio" name="txtMunicipio" value={municipio} onChange={(e) => { setMunicipio(e.target.value) }} className="form-control" placeholder="Municipio" maxLength="50" />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <div className="d-flex flex-row align-items-center mb-2">
-                                    <input type="text" id="txtNombre" name="txtNombre" value={estado} onChange={(e) => { setEstado(e.target.value) }} className="form-control" placeholder="Estado" maxLength="50" />
+                                    <input type="text" id="txtEstado" name="txtEstado" value={estado} onChange={(e) => { setEstado(e.target.value) }} className="form-control" placeholder="Estado" maxLength="50" />
                                 </div>
                             </div>
                             <div className="tile-footer">
@@ -274,7 +332,7 @@ export default function Profile() {
                     <div className="Perfil bg-thirdcolor w-100 text-center">
                         <div className="row align-items-center" >
                             <div className="col-12 col-sm-3">
-                                <img src={prueba} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
+                                <img src={activeUser.imgUrl} className="rounded mx-auto d-block" alt="Foto de Perfil" id="FotoRegistro" />
                             </div>
                             <div className="col-12 col-sm-7 txt-white">
                                 <h3 className="mt-1" id="NombreCompleto"> {activeUser.username} </h3>
