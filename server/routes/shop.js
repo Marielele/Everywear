@@ -31,3 +31,34 @@ router.post('/createshop', (req, res) => {
         }
     })
 })
+
+//Obtener
+router.get('/getshops', (req, res) => {
+    shopModel.find({}, function (docs, err) {
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+router.post('/getmyshops', (req, res) => {
+    shopModel.find({ idU: req.body.idU }, function (docs, err) {
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})
+
+router.post('/getstoredata', (req, res) => {
+    shopModel.findOne({ idTienda: req.body.idTienda }, function (docs, err) {
+        if (!err) {
+            res.send(docs)
+        } else {
+            res.send(err)
+        }
+    })
+})

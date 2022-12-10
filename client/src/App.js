@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Stores from './pages/Stores';
 import AddShop from './pages/AddShop';
+import MyShops from './pages/MyShops';
+import Shop from './pages/Shop';
+import MyShop from './pages/MyShop';
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/stores" element={<Stores />} />
         <Route exact path="/addshop" element={<AddShop />} />
+        <Route exact path="/myshops" element={<MyShops />} />
+        <Route exact path="/shop/:idTienda" element={<Shop />} />
+        <Route exact path="/myshop/:idTienda" element={<MyShop />} />
       </Routes>
     </div>
   );
